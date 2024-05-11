@@ -15,7 +15,7 @@
     <p class="card-text">Комната: {{ student.room }}</p>
  <p class="card-text">Баллы: {{ student.total_points }} (Адм: {{ student.total_admin_points }}; ССО: {{ student.total_sso_points }})</p>
 <button type="button" class="btn {% if ranking_position <= 10 %}btn-success{% elif ranking_position > 10 and ranking_position <= middle_index %}btn-primary{% elif ranking_position > red_threshold %}btn-danger{% else %}btn-warning{% endif %}">
-    Место: {{ ranking_position }}
+    Место: {{ ranking_position }} из {{ total_students }}
 </button>
 
 </div>
