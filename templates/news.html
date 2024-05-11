@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}  <!-- Загрузка статических файлов, если это необходимо -->
+
+{% block content %}
+    <style>
+    
+    .card-img {
+  height: 200px; /* Установите желаемую высоту изображений */
+  overflow: hidden; /* Обрезка изображения, если оно выходит за пределы блока */
+}
+.news-card {
+    margin-bottom: 30px; /* Настройте значение по вашему желанию */
+}
+.card-img img {
+  width: 100%; /* Ширина изображения равна ширине контейнера */
+  height: 100%; /* Высота изображения равна высоте контейнера */
+  object-fit: cover; /* Обеспечивает заполнение контейнера изображением без искажений */
+  transition: transform 0.3s ease; /* Плавность анимации */
+}
+
+.card-img:hover img {
+  transform: scale(1.1); /* Увеличение изображения при наведении */
+}
+    </style>
+    <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section">
+
+      <img src="{% static '/img/hero-bg.jpg' %}" alt="" data-aos="fade-in">
+
+   <div class="container">
+  <h2 data-aos="fade-up" data-aos-delay="100">
+    Учись сегодня,<br>возглавляй завтра
+  </h2>
+  <p data-aos="fade-up" data-aos-delay="200">
+    Мы предлагаем уникальную систему накопления баллов за активное участие в жизни общежития и университета.
+  </p>
+  <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
+    <a href="{% url 'student_list' %}" class="btn-get-started">Студенты</a>
+  </div>
+</div>
+
+
+    </section><!-- /Hero Section -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-up" data-aos-delay="100">
+            <img src="{% static 'img/about.jpg' %}" class="img-fluid" alt="">
+          </div>
+
+<div class="col-lg-6 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200">
+    <h3>Преимущества участия в бальной системе общежития</h3>
+    <p class="fst-italic">
+      Наша система накопления баллов позволяет студентам не только активно участвовать в жизни университета, но и получать за это заслуженные бонусы.
+    </p>
+    <ul>
+      <li><i class="bi bi-check-circle"></i> <span>Повышение ответственности и активности среди студентов.</span></li>
+      <li><i class="bi bi-check-circle"></i> <span>Возможность получить преференции при заселении в следующем учебном году.</span></li>
+      <li><i class="bi bi-check-circle"></i> <span>Накопление баллов за участие в мероприятиях общежития и волонтёрских акциях, что положительно сказывается на общественной и учебной активности студентов.</span></li>
+    </ul>
+    <a href="{% url 'student-statistics' %}" class="read-more"><span>Статистика</span><i class="bi bi-arrow-right"></i></a>
+</div>
+
+
+        </div>
+
+      </div>
+
+    </section><!-- /About Section -->
+    
+    <!-- Page Title -->
+    <div class="page-title" data-aos="fade">
+      <div class="heading">
+        <div class="container">
+          <div class="row d-flex justify-content-center text-center">
+           <div class="col-lg-8">
+  <h1>Мероприятия и Баллы</h1>
+  <p class="mb-0">Принимайте активное участие в жизни общежития и получайте баллы, которые могут быть использованы для улучшения условий проживания или получения привилегий. Участие в мероприятиях не только способствует вашему личностному росту, но и приносит дополнительные бонусы в вашу студенческую жизнь.</p>
+</div>
+
+          </div>
+        </div>
+      </div>
+    
+    </div><!-- End Page Title -->
+
+    <!-- Events Section -->
+ <section id="news" class="news section">
+  <div class="container" data-aos="fade-up">
+    <div class="row">
+      {% for news in news_list %}
+        <div class="col-md-6 d-flex align-items-stretch news-card">
+          <div class="card">
+            {% if news.images %}
+              <div class="card-img">
+                <img src="{{ news.images.url }}" alt="{{ news.title }}"> {{ news.images.url }}
+              </div>
+            {% endif %}
+            <div class="card-body">
+              <p class="fst-italic text-center">{{ news.date|date:"l, F d, Y at H:i" }}</p>
+              <p class="card-text">{{ news.content|truncatewords:30 }}</p>
+            </div>
+          </div>
+        </div>
+        {% if forloop.counter|divisibleby:2 and not forloop.last %}
+          </div><div class="row">
+        {% endif %}
+      {% empty %}
+        <div class="col-12">
+          <div class="alert alert-info" role="alert">
+            Новостей пока нет.
+          </div>
+        </div><br><br>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<!-- /News Section -->
+
+{% endblock %}
