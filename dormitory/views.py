@@ -32,6 +32,7 @@ class PointsHistoryListView(ListView):
 
 
 def student_dossier_view(request, student_id):
+    """Просмотр досье студента."""
     student = get_object_or_404(Student, id=student_id)
     points_history = PointsHistory.objects.filter(student=student).select_related('event')
 
@@ -63,11 +64,13 @@ def student_dossier_view(request, student_id):
 
 
 class PointsHistorySortsListView(ListView):
+    """Выдача истории баллов для конкретного студента."""
     model = Student
     template_name = 'statistics.html'
     context_object_name = 'students'
 
     def get_queryset(self):
+        """Фильтрация студентов по общежитию, группе и комнате."""
         queryset = Student.objects.annotate(
             total_admin_points=Sum('pointshistory__event__points', filter=Q(pointshistory__event__event_type='admin')),
             total_sso_points=Sum('pointshistory__event__points', filter=Q(pointshistory__event__event_type='sso')),
@@ -88,6 +91,7 @@ class PointsHistorySortsListView(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
+        """Добавление списка общежитий в контекст."""
         context = super().get_context_data(**kwargs)
         context['dormitories'] = Dormitory.objects.all()  # Добавляем список общежитий
         return context

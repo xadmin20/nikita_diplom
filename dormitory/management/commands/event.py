@@ -7,21 +7,22 @@ import random
 
 from dormitory.models import Student, Event, PointsHistory
 
+
 def random_date(start, end):
-    """Генерирует случайную дату в пределах заданного диапазона."""
-    fake = Faker()
-    return fake.date_time_between(start_date=start, end_date=end)
+    """Генерирует случайную дату в пределах заданного диапазона.
+    :param start: Начальная дата
+    :param end: конечная дата
+    :return: случайная дата в пределах заданного диапазона
+    """
+    time_between_dates = end - start
+    days_between_dates = time_between_dates.days
+    random_number_of_days = random.randrange(days_between_dates)
+    random_time = timedelta(hours=random.randrange(24), minutes=random.randrange(60))
+    return start + timedelta(days=random_number_of_days) + random_time
+
 
 class Command(BaseCommand):
     help = 'Populates events and assigns them to students'
-
-    def random_date(self, start, end):
-        """Генерирует случайную дату в пределах заданного диапазона."""
-        time_between_dates = end - start
-        days_between_dates = time_between_dates.days
-        random_number_of_days = random.randrange(days_between_dates)
-        random_time = timedelta(hours=random.randrange(24), minutes=random.randrange(60))
-        return start + timedelta(days=random_number_of_days) + random_time
 
     def handle(self, *args, **options):
         fake = Faker('ru_RU')
@@ -65,7 +66,7 @@ class Command(BaseCommand):
             number_of_events = random.randint(10, 20)
             selected_events = random.choices(events, k=number_of_events)
             for event in selected_events:
-                event_date = self.random_date(start_date, end_date)
+                event_date = random_date(start_date, end_date)
                 PointsHistory.objects.create(
                     student=student,
                     event=event,
