@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,8 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
-# Application definition
-
+# Приложения, установленные в проекте
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,6 +40,7 @@ INSTALLED_APPS = [
     'dormitory.apps.DormitoryConfig',
 ]
 
+# настройка пути к приложениям
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -51,8 +51,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'Nikita.urls'
-
+ROOT_URLCONF = 'Nikita.urls'  # настройка пути к корневому URL-файлу
+# настройка пути к шаблонам
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -75,18 +75,27 @@ WSGI_APPLICATION = 'Nikita.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'nikita',  # Имя базы данных
+        'USER': 'nikitauser',  # Имя пользователя
+        'PASSWORD': 'nikitapass',  # Пароль
+        'HOST': 'db',  # Имя сервиса PostgreSQL в docker-compose.yml
+        'PORT': '5432',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -107,22 +116,17 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = 'ru'  # язык приложения
-
 TIME_ZONE = 'UTC'  # часовой пояс
-
 USE_I18N = True  # использовать международные языковые настройки
-
 USE_TZ = True  # использовать часовой пояс
 
-STATIC_URL = 'static/'  # URL, по которому будут доступны статические файлы
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-    BASE_DIR / 'news'  # Добавляете этот путь, если хотите, чтобы Django видел файлы и здесь
-]
-# Путь в файловой системе, где будут храниться загруженные файлы
-MEDIA_ROOT = BASE_DIR / 'media'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# URL, по которому будут доступны медиафайлы
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

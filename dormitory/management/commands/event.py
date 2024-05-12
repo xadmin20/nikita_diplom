@@ -21,6 +21,7 @@ def random_date(start, end):
     return start + timedelta(days=random_number_of_days) + random_time
 
 
+
 class Command(BaseCommand):
     help = 'Populates events and assigns them to students'
 
